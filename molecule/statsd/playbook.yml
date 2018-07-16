@@ -6,7 +6,7 @@
 
   vars_files:
     - ../resources/vars/statsd-common.yaml
-    - ../resources/vars/nodejs-common.yaml
+    - ../resources/vars/nodejs.yaml
 
   pre_tasks:
     - name: include tasks for preconf
