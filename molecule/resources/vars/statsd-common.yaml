@@ -1,0 +1,4 @@
+---
+
+statsd_version: v0.8.0
+statsd_root_dir: /opt/statsd

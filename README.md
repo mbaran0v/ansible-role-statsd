@@ -12,7 +12,7 @@ Ansible role for [Statsd](https://github.com/etsy/statsd). Currently this works 
 Requirements
 ------------
 
-None.
+You should install Node.js on server for this role (i use [geerlingguy/ansible-role-nodejs](https://github.com/geerlingguy/ansible-role-nodejs.git) for this).
 
 Role Variables
 --------------
@@ -39,8 +39,12 @@ Including an example of how to use your role (for instance, with variables passe
 
 ```yaml
 - hosts: statsd
+  vars:
+    nodejs_version: "6.x"
+    nodejs_install_npm_user: root
   roles:
-      - { role: mbaran0v.statsd }
+      - role: geerlingguy.nodejs
+      - role: mbaran0v.statsd
 ```
 
 License

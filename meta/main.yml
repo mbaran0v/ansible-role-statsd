@@ -3,7 +3,7 @@ dependencies: []
 
 galaxy_info:
   author: Maxim Baranov
-  description: Statsd daemon
+  description: Statsd Daemon for easy but powerful stats aggregation
   company: ""
   license: "license (MIT, BSD)"
   min_ansible_version: 2.4
