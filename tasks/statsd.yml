@@ -35,7 +35,7 @@
     path: "{{ deploy_helper.new_release_path }}"
   become: yes
   become_user: "{{ statsd_user }}"
-  
+
 - name: configure upstart start script
   template:
     src: upstart.conf.j2
