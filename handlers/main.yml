@@ -1,0 +1,10 @@
+---
+
+- name: "{{ statsd_title }} restart"
+  service:
+    name: "{{ statsd_title }}"
+    state: restarted
+
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload

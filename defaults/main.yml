@@ -1,0 +1,32 @@
+---
+
+# commit, branch, tag
+statsd_version: v0.8.0
+statsd_git_url: https://github.com/etsy/statsd.git
+
+statsd_title: statsd
+statsd_root_dir: /opt/statsd
+statsd_nodejs: /usr/bin/nodejs
+statsd_user: _statsd
+
+statsd_config:
+  # required variables
+  port: 8125
+  graphiteHost: 127.0.0.1
+  graphitePort: 2003
+  # optional variables
+  backends:
+    - ./backends/graphite
+  debug: false
+  address: 0.0.0.0
+  address_ipv6: false
+  mgmt_address: 0.0.0.0
+  mgmt_port: 8126
+  title: "{{ statsd_title }}"
+  healthStatus: up
+  dumpMessages: false
+  flushInterval: 10000
+  percentThreshold: 90
+  flush_counts: true
+  graphite:
+    legacyNamespace: false

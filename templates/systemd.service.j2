@@ -1,0 +1,16 @@
+[Unit]
+Description=Network daemon for aggregating statistics
+Documentation=https://github.com/etsy/statsd/
+Wants=network.target
+
+[Service]
+Type=simple
+User={{ statsd_user }}
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier={{ statsd_title }}
+ExecStart={{ statsd_nodejs }} {{ statsd_root_dir }}/current/stats.js {{ statsd_root_dir }}/current/config.js
+
+[Install]
+WantedBy=multi-user.target

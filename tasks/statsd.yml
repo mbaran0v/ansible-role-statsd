@@ -1,0 +1,79 @@
+---
+
+- name: create user for statsd
+  user:
+    name: "{{ statsd_user }}"
+    shell: /bin/false
+    system: yes
+    state: present
+
+- name: initialize the deploy root and gather facts
+  deploy_helper:
+    path: "{{ statsd_root_dir }}"
+    release: "{{ statsd_version }}"
+    state: present
+
+- name: create release directory
+  file:
+    dest: "{{ deploy_helper.new_release_path }}"
+    state: directory
+    owner: "{{ statsd_user }}"
+    group: "{{ statsd_user }}"
+    mode: 0750
+
+- name: clone from git
+  git:
+    repo: "{{ statsd_git_url }}"
+    dest: "{{ deploy_helper.new_release_path }}"
+    version: "{{ statsd_version }}"
+    force: yes
+  become: yes
+  become_user: "{{ statsd_user }}"
+
+- name: install npm dependencies
+  npm:
+    path: "{{ deploy_helper.new_release_path }}"
+  become: yes
+  become_user: "{{ statsd_user }}"
+  
+- name: configure upstart start script
+  template:
+    src: upstart.conf.j2
+    dest: "/etc/init/{{ statsd_title }}.conf"
+  when: ansible_service_mgr == "upstart"
+  notify:
+    - "{{ statsd_title }} restart"
+
+- name: configure sysvinit start script
+  template:
+    src: sysvinit.conf.j2
+    dest: "/etc/init.d/{{ statsd_title }}"
+  when: ansible_service_mgr == "sysvinit"
+  notify:
+    - "{{ statsd_title }} restart"
+
+- name: configure systemd start script
+  template:
+    src: systemd.service.j2
+    dest: "/etc/systemd/system/{{ statsd_title }}.service"
+  when: ansible_service_mgr == "systemd"
+  notify:
+    - reload systemd
+    - "{{ statsd_title }} restart"
+
+- name: create config
+  copy:
+    content: |
+      {{ statsd_config | to_nice_json() }}
+    dest: "{{ deploy_helper.new_release_path }}/config.js"
+    owner: "{{ statsd_user }}"
+    group: "{{ statsd_user }}"
+    mode: 0750
+  notify:
+    - "{{ statsd_title }} restart"
+
+- name: finalize the deploy, removing the unfinished file and switching the symlink
+  deploy_helper:
+    path: "{{ statsd_root_dir }}"
+    release: "{{ deploy_helper.new_release }}"
+    state: finalize

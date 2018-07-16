@@ -1,0 +1,9 @@
+---
+
+- include: statsd.yml
+
+- name: Ensure that Statsd is started
+  service:
+    name: "{{ statsd_title }}"
+    state: started
+    enabled: yes
