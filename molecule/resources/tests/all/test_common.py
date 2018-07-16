@@ -3,7 +3,10 @@ debian_os = ['debian', 'ubuntu']
 rhel_os = ['redhat', 'centos']
 statsd = {
     'version': 'v0.8.0',
-    'root': '/opt/statsd'
+    'root': '/opt/statsd',
+    'user': '_statsd',
+    'service': 'statsd',
+    'socket': 'udp://0.0.0.0:8125'
 }
 
 
@@ -16,16 +19,16 @@ def test_release_directory(host):
 
     assert f.exists
     assert f.is_directory
-    assert f.user == '_statsd'
-    assert f.group == '_statsd'
+    assert f.user == '{user}'.format(**statsd)
+    assert f.group == '{user}'.format(**statsd)
 
 
 def test_release_config(host):
     f = host.file('{root}/releases/{version}/config.js'.format(**statsd))
 
     assert f.exists
-    assert f.user == '_statsd'
-    assert f.group == '_statsd'
+    assert f.user == '{user}'.format(**statsd)
+    assert f.group == '{user}'.format(**statsd)
 
 
 def test_release_symlink(host):
@@ -36,14 +39,13 @@ def test_release_symlink(host):
 
 
 def test_socket(host):
-    s = host.socket('tcp://0.0.0.0:8125')
-    print(host.socket.get_listening_sockets())
+    s = host.socket('{socket}'.format(**statsd))
 
     assert s.is_listening
 
 
 def test_serice(host):
-    s = host.service('statsd')
+    s = host.service('{service}'.format(**statsd))
 
     assert s.is_enabled
     assert s.is_running

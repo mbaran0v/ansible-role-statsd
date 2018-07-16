@@ -1,8 +1,15 @@
 ---
 
+- name: install additional packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ __additional_packages }}"
+
 - name: create user for statsd
   user:
     name: "{{ statsd_user }}"
+    home: "{{ statsd_root_dir }}"
     shell: /bin/false
     system: yes
     state: present
