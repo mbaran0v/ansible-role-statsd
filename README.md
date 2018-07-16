@@ -1,5 +1,9 @@
 # Ansible role: Statsd
 
+[![Build Status](https://travis-ci.org/mbaran0v/ansible-role-statsd.svg?branch=master)](https://travis-ci.org/mbaran0v/ansible-role-statsd)
+[![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![GitHub tag](https://img.shields.io/github/tag/mbaran0v/ansible-role-statsd)](https://github.com/mbaran0v/ansible-role-statsd/tags)
+
 Ansible role for [Statsd](https://github.com/etsy/statsd). Currently this works on Debian and RedHat based linux systems. Tested platforms are:
 
 * Ubuntu 16.04
